@@ -34,17 +34,24 @@ namespace Restaurant_Menu_Organiser.Utilities
             INotificationsService _notificationsService = (INotificationsService)_actioncontext.HttpContext.RequestServices.GetService(typeof(INotificationsService));
             UserManager<IdentityUser> _userManager = (UserManager<IdentityUser>)_actioncontext.HttpContext.RequestServices.GetService(typeof(UserManager<IdentityUser>));
             Id = _actioncontext.ActionArguments["id"].ToString();
-            string UserId = (Action == "Edit Employee") ? _userPreferencesServices.GetloggedInUserId() : _actioncontext.ActionArguments["UserId"].ToString();
+
+            string UserId = (Action == "Edit Employee") ? _userPreferencesServices.GetloggedInUserId() : 
+            _actioncontext.ActionArguments["UserId"].ToString();
             var DeployedModel = ((string)_actioncontext.RouteData.Values["Action"] == "Edit") ? _actioncontext.ActionArguments["model"] :
-                ((string)_actioncontext.RouteData.Values["Action"] == "Create") ? _actioncontext.ActionArguments["model"] : null;
+            ((string)_actioncontext.RouteData.Values["Action"] == "Create") ? _actioncontext.ActionArguments["model"] : null;
+
             var thisUser = _userManager.FindByIdAsync(UserId).Result;
+
             if (!_userManager.IsInRoleAsync(thisUser, RequestingRoles).Result)
             { return; }
+
             bool Result = _userPreferencesServices.ExecuteApproval(RequestingRoles, Action, Id, DeployedModel).Result;
+
             if (Result == true)
             {
                 _actioncontext.Result = new RedirectToRouteResult(new RouteValueDictionary { { "Controller", "Home" }, { "Action", "Activity" } });
             }
+
             if (Result == false)
             {
                 string Failedmsg = UserPreferencesServices.FailedStatusMessage();
@@ -69,6 +76,6 @@ namespace Restaurant_Menu_Organiser.Utilities
     }
 }
 /////System.Web.Http.Controllers.HttpActionContext.
-////.......................Retrieve current logged in UserId Using the HttpContext
+////..................Retrieve current logged in UserId Using the HttpContext
 //base.AuthenticationSchemes;_actioncontext.Result = new RedirectResult("/Home/Activities");
 /*this.UserID = _userManager.GetUserId(_httpcontext.User); */  //base.AuthenticationSchemes;

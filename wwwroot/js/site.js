@@ -6,12 +6,6 @@
 
 
 //$(window).load(function () {
-//    var alat = ("#notinumber").html();
-//    $("body").one("mouseover", function () {
-//        if (parseInt(alat) > 0) {
-//            /////execute pointer
-//        }
-//    });
 //});
 
 $(document).ready(function () {

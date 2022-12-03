@@ -3,21 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using Restaurant_Menu_Organiser.Data;
 using Restaurant_Menu_Organiser.Models.Employees;
 using Restaurant_Menu_Organiser.Repositories;
 using Restaurant_Menu_Organiser.Utilities;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Http;
 using Restaurant_Menu_Organiser.Utilities.Services;
 using Restaurant_Menu_Organiser.ViewModels;
 using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 
+//add humanizer namespsace to projects
 namespace Restaurant_Menu_Organiser.Controllers
 {
     public class EmployeesController : Controller
@@ -29,9 +26,10 @@ namespace Restaurant_Menu_Organiser.Controllers
         //private readonly RoleManager<IdentityRole> _roleManager;
         //private readonly ControllerContext _controllerContext;
         //private readonly IWebHostEnvironment _hostinEnvironment;
+
         public string UserId { get; set; }
-        public EmployeesController(ApplicationDbContext context, IEmployeeRepository employeeRepository, UserManager<IdentityUser> userManager,
-            IUserPreferencesServices userPreferencesServices)
+        public EmployeesController(ApplicationDbContext context, IEmployeeRepository employeeRepository, 
+            UserManager<IdentityUser> userManager,IUserPreferencesServices userPreferencesServices)
         {
             _context = context;
             _userManager = userManager;
@@ -43,9 +41,8 @@ namespace Restaurant_Menu_Organiser.Controllers
         public async Task<IActionResult> Index()
         {
             ViewBag.UserId = UserId;
-            IEnumerable<Employee> AllEmploy = await _context.Employees.ToListAsync();
-            Dictionary<int, Employee> AllEmploy1 = AllEmploy.ToDictionary(a => a.EmployeeId, a => a);
-            ViewBag.AllEmployees = AllEmploy1;
+            Dictionary<int, Employee> AllEmploy = await _context.Employees.ToDictionaryAsync(a => a.EmployeeId, a => a);
+            ViewBag.AllEmployees = AllEmploy;
             return View();
         }
         // GET: Employees/Details/5
@@ -72,7 +69,7 @@ namespace Restaurant_Menu_Organiser.Controllers
             return View();
         }
         /// <summary>
-        /// TO EXTERNAL CALL FOR AJAX FOR TYPESCRIPT COMPONENT
+        /// TO EXTERNAL CALL IN ANGULAR FRONT END SERVER FOR AJAX FOR TYPESCRIPT COMPONENT
         /// </summary>
         public JsonResult RetrieveCurrentEditedEmployee(int empid)
         {
@@ -93,8 +90,8 @@ namespace Restaurant_Menu_Organiser.Controllers
                             string disparity = (em[i].GetValue(EmployeeEq).ToString().Trim() != dem[p].GetValue(disposableEmployee).ToString().Trim()) ?
                               $"{em[i].Name} = {em[i].GetValue(disposableEmployee)}" : "same";
                             ChangedData.Add(disparity); 
-                            ChangedData.Distinct(); ChangedData.Remove("same");
-                            break;
+                      ChangedData.Distinct(); ChangedData.Remove("same");
+                            break; 
                     }
                 }
             }/////API TEST COMPLETE.
@@ -195,6 +192,7 @@ namespace Restaurant_Menu_Organiser.Controllers
             ViewBag.Updates = "Edits applied successfully";
             return RedirectToAction("Index", "Employees");
         }
+
         // GET: Employees/Delete/5
         [Authorize(Roles = "Admin, ElevatedAccess")]
         public async Task<IActionResult> Delete(int? id)
@@ -227,6 +225,7 @@ namespace Restaurant_Menu_Organiser.Controllers
         {
             return _context.Employees.Any(e => e.EmployeeId == id);
         }
+        
     }
 }
 //return RedirectToAction(nameof(Index));

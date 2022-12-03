@@ -23,8 +23,11 @@ namespace Restaurant_Menu_Organiser.Utilities.Services
         private readonly INotificationsService _notificationsService;
         private readonly IApprovalsRepository _approvalsRepository;
         private readonly ApplicationDbContext _context;
-        public Task<IdentityUser> User { get { return GetloggedInUser(); } }///////AsyncCallback;
+
+        public Task<IdentityUser> User { get { return GetloggedInUser(); } }///AsyncCallback;
+
         public string Id { get { return GetloggedInUserId(); } }
+
         public UserPreferencesServices(UserManager<IdentityUser> userManager,
             IHttpContextAccessor contextAccessor, IEmployeeRepository employeeRepository,
             INotificationsService notificationsService, IApprovalsRepository approvalsRepository, ApplicationDbContext context)
@@ -36,32 +39,40 @@ namespace Restaurant_Menu_Organiser.Utilities.Services
             _approvalsRepository = approvalsRepository;
             _context = context;
         }
+
         public async Task<IdentityUser> GetloggedInUser()
         {
             var user = await _userManager.FindByIdAsync(Id);
             return user;
         }
+
         public async Task<bool> IsInRole(string role)
         {
             bool condition = await _userManager.IsInRoleAsync(User.Result, role);
             return condition;
         }
-        public static string SuccessStatusMessage(string action, string otherParam)
-        {
-            return "The Action to " + action + " with corresponding of Id : " + otherParam + " has been redirected to someone with the required elevated access for approval";
-        }
-        public static string FailedStatusMessage()
-        {
-            return "There was an issue sending your request for its required approval, your request was not submitted, try again or contact Admin.";
-        }
+
+        //comments needed.
         public string GetloggedInUserId()
         {
             return _contextAccessor.HttpContext.User?.FindFirstValue(ClaimTypes.NameIdentifier);
         }
+
         public bool IsAuthenticated()
         {
             return _contextAccessor.HttpContext.User.Identity.IsAuthenticated;
         }
+
+        public static string SuccessStatusMessage(string action, string otherParam)
+        {
+            return "The Action to " + action + " with corresponding of Id : " + otherParam + " has been redirected to someone with the required elevated access for approval";
+        }
+
+        public static string FailedStatusMessage()
+        {
+            return "There was an issue sending your request for its required approval, your request was not submitted, try again or contact Admin.";
+        }
+
         public async Task<bool> ExecuteApproval(string RequestingRoles, string Action, string Id, object model)
         {
             var UserId = GetloggedInUserId();
@@ -197,8 +208,13 @@ namespace Restaurant_Menu_Organiser.Utilities.Services
                         ///////Delegate Instructions.......
                         break;
                 }
+
+                return true;
             }
-            return true;
+            else
+            {
+                    return false;
+            }
         }
     }
 }

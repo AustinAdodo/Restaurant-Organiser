@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Restaurant_Menu_Organiser.Data;
-using Restaurant_Menu_Organiser.Models.Employees;
 using Restaurant_Menu_Organiser.Repositories;
 using Restaurant_Menu_Organiser.ViewModels;
 
@@ -38,11 +35,13 @@ namespace Restaurant_Menu_Organiser.Controllers
             ViewBag.Users = allUsers;
             return View(_roleManager.Roles);
         }
+
         public JsonResult RetrieveRoles(string roleId)
         {
             var QueriedRole = _roleManager.Roles.Where(a => a.Id == roleId).FirstOrDefault();
             return Json(QueriedRole);
         }
+
         public async Task<IActionResult> ToggleEmployeeStatus(string EmployeeId)
         {
             int.TryParse(EmployeeId, out int Id);
@@ -56,6 +55,7 @@ namespace Restaurant_Menu_Organiser.Controllers
         {
             return View();
         }
+
         // GET: Administration/CreateRole
         [Authorize]
         public IActionResult CreateRole()
@@ -209,7 +209,7 @@ namespace Restaurant_Menu_Organiser.Controllers
             return RedirectToAction("Index", "Administration");
         }
         // GET: Administration/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(int? id) 
         {
             if (id == null)
             {

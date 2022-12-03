@@ -25,8 +25,10 @@ namespace Restaurant_Menu_Organiser
         {
             Configuration = configuration;
         }
+
         public IConfiguration Configuration { get; }
         ////called at runtime. ..... add services to the container.
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContextPool<ApplicationDbContext>(options =>
@@ -43,6 +45,7 @@ namespace Restaurant_Menu_Organiser
                          options.UseSqlServer(Configuration.GetConnectionString("RestaurantOfficeApprovalDBConnection")));
             services.AddDbContextPool<ApplicationDbContext>(options =>
                          options.UseSqlServer(Configuration.GetConnectionString("RestaurantOfficeNotificationsDBConnection")));
+
             services.AddScoped<IEmployeeRepository, Models.Employees.DBEmployeeImplementations>();
             services.AddScoped<IItemsRepository, Models.Items.DbItemImplementations>();
             services.AddScoped<ISalesRepository, Models.Sales.DbSalesImplementations>();
@@ -56,10 +59,12 @@ namespace Restaurant_Menu_Organiser
                            options.Password.RequiredLength = 5; options.Password.RequiredUniqueChars = 1;
                            options.SignIn.RequireConfirmedAccount = true;
                        }).AddEntityFrameworkStores<ApplicationDbContext>();
+
             services.AddControllersWithViews();
             services.AddRazorPages();
         }
         // This method gets called at runtime. Use this method to configure the HTTP request pipeline.
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -91,6 +96,11 @@ namespace Restaurant_Menu_Organiser
         }  
     }
 }
+
+
+
+
+
 
 //integrate continious integaration and continious deployment with code CI/CD FOR DEV OPS MANIPULATION
  //app.UseFileServer(new FileServerOptions
