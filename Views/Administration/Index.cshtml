@@ -1,0 +1,58 @@
+﻿@model IEnumerable<IdentityRole>
+@inject UserManager<IdentityUser> _userManager;
+@{
+    ViewData["Title"] = "Displaying All Roles";
+    IEnumerable<IdentityUser> Users = ViewBag.Users;
+}
+<h1>Role List (Restrictions applied)</h1>
+<p>
+    <a style="float:right" asp-action="CreateRole" asp-controller="Administration">Create New Role</a>
+</p>
+@if (Model.Any())
+{
+    string description = "";
+    <div class="container">
+        @foreach (var role in Model)
+        {
+            <div class="card col-md-6">
+                <div style="background-color:darkcyan" class="card-header">
+                    Role Id : @role.Id
+                </div>
+                <div class="card-body">
+                    <div class="card-title">Role Name : @role.Name</div>
+                    <br />
+                    <a class="btn btn-primary" asp-action="EditRole" asp-controller="Administration" asp-route-id="@role.Id">
+                        Edit
+                    </a>&ensp;&ensp;<a class="btn btn-primary btndetail" asp-action="RoleDetails" asp-controller="Administration" asp-route-id="@role.Id">Details</a>
+                    &ensp;&ensp;<a class="btn btn-primary" asp-action="EditUsersInARole" asp-controller="Administration" asp-route-Id="@role.Id">Manage</a>
+                    &ensp;&ensp;<button class="btn btn-danger" asp-action="Delete" asp-controller="Administration" asp-route-id="@role.Id">Delete</button>
+                </div>
+                <div style="background-color:aquamarine" class="card-footer">
+                    <span style="background-color:green; color: floralwhite">Users Summary :</span> 
+                    @foreach (var user in Users)
+                    {
+                        @if (await _userManager.IsInRoleAsync(user, role.Name))
+                        {
+                            <span style="color: navy"> @user.Email</span>@:&ensp;<span style="color: navy"> @user.Id</span><br /> 
+                        }
+                    }
+                <br />@{string add = "Additional Information on this Role"; }
+                    @{ description = (role.Name == "Admin") ? "Super User/Admin" : (role.Name == "IT") ? "IT Personel : CRUD Operations, Back-end, Server Management." : "Normal Users"; }
+                    <span style="background-color: cadetblue; color: floralwhite">@add</span> : @description
+                </div>
+            </div><br />
+        }
+        @*dynamic prop render<br/><li></li>*@
+        <div ng-app="RoleModule" class="row" id="roledetails" style="display:none">
+            <div class="col-sm-5 offset-7">
+                <ng-view></ng-view>
+            </div>
+        </div>
+    </div>
+}
+@if (!Model.Any())
+{
+    <div><h1 style="color:navy">The Selected Resource Has No Content</h1></div>
+    <div><span>Click Here to Create Role</span><span><input type="button" class="btn btn-primary" asp-action="CreateRole" asp-controller="Administration" /></span></div>
+}
+

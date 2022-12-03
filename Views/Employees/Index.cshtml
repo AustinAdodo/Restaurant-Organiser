@@ -1,0 +1,123 @@
+﻿@using Restaurant_Menu_Organiser.Models.Employees;
+@using System.Diagnostics;
+@{
+    ViewData["Title"] = "Index";
+    Dictionary<int, Employee> AllEmployees = ViewBag.AllEmployees;
+    string LoggedInUserId = ViewBag.UserId;
+}
+@*<h1></h1><br/>*@
+<div class="row"><div class="col-md-5"><h1>Employee Lists</h1></div><div class="col-md-7"><span style="float:right"><input placeholder="    search Employee" type="text" /></span></div></div>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" status="" id="exampleModalLabel">Deactivate Employee</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span id="dismiss" style="background-color: red; height: 20px; width: 20px; font-size:18px" aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to deactivate this employee?
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="no" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <button id="deactivate" targetid="" type="button" class="btn btn-primary">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<Table style="width:auto">
+    <thead>
+        <tr>
+            <th style="width: auto; color: skyblue"><span>Department Names</span></th>
+            <th style="width: auto; color:skyblue">
+                <span>Employees</span> <span style="float:right">
+                    <label style="color: white">All Departments</label>&nbsp;<input type="radio" name="emplist" value="All Departments" />&ensp;
+                    <label style="color: white">Default</label>&nbsp;<input checked="checked" type="radio" name="emplist" value="Default" />
+                </span>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="width:auto">
+                <ul style="padding-bottom:400px">
+                    @{ foreach (var kvp in AllEmployees.Where(a => a.Value.EmployeeDepartment != null).Select(a => a.Value.EmployeeDepartment).Distinct())
+                        {
+                            if (@kvp == "Procurement")
+                            {
+                                <li style="color:blue"><div style="color:white"> @kvp</div></li>
+                            }
+                            if (@kvp != "Procurement")
+                            {
+                                <li><div style="color:white"> @kvp</div></li>
+                            }
+                        }
+                    }
+                </ul>
+            </td>
+            <td ng-model="employees" style="width:auto">
+                <div class="container" id="maindisplay" style="">
+                    <ul style="">
+                        @if (AllEmployees != null)
+                        {
+                            int countn = 0; var Imagestream = "";
+                            string attbute = "dragnn"; var replacestream = "/Images/smile.png";
+                            foreach (KeyValuePair<int, Employee> emp in AllEmployees.Where(a => a.Value.EmployeeDepartment == "Procurement"))
+                            {
+                                Imagestream = (string.IsNullOrEmpty(emp.Value.EmployeeImagePath) ? replacestream : emp.Value.EmployeeImagePath);
+                                <li id="@attbute@countn" class="dragline" style="display: inline-block">
+                                    <div class="drag1">
+                                        <img style="height: 200px; width: 260px; border:2px solid powderblue;" src="@Imagestream " />
+                                        <div class="align-items-center" style="padding-top: 5px;">
+                                            <span style="color:white">@emp.Value.EmployeeFullName</span>
+                                            &ensp;<span style="color:white">
+                                                <a class="btn btn-info" asp-action="Edit" asp-controller="Employees" asp-route-id="@emp.Value.EmployeeId">Edit</a>
+                                            </span>&ensp;
+                                            <form method="post">
+                                                <span style="color:white">
+                                                    <button type="submit" asp-action="Delete" asp-controller="Employees" asp-route-id="@emp.Value.EmployeeId"
+                                                            asp-route-UserId="@LoggedInUserId" class="btn btn-danger">
+                                                        Delete
+                                                    </button>
+                                                </span>
+                                            </form>
+                                        </div><br />
+                                        @if (User.IsInRole("Admin"))
+                                        {
+                                            <div class="empactive align-items-center" style="padding-bottom: 20px;">
+                                                @if (@emp.Value.EmployeeStatus == "Active")
+                                                {
+                                                    <span style="color:white">Status : </span><span class="status" style="color:green">@emp.Value.EmployeeStatus</span>@:&ensp;
+                                                    <span style="">
+                                                        <label class="switch">
+                                                            <input type="checkbox" checked><span empid="@emp.Value.EmployeeId" class="slider round" data-toggle="modal" data-target="#exampleModal"></span>
+                                                        </label>
+                                                    </span>
+                                                }
+                                                @if (@emp.Value.EmployeeStatus == "Inactive")
+                                                {
+                                                    <span style="color:white">Status : </span><span class="status" style="color:red">@emp.Value.EmployeeStatus</span>@:&ensp;
+                                                    <span style="">
+                                                        <label class="switch">
+                                                            <input type="checkbox" focus><span empid="@emp.Value.EmployeeId" class="slider round" data-toggle="modal" data-target="#exampleModal"></span>
+                                                        </label>
+                                                    </span>
+                                                }
+
+                                            </div>
+                                        }
+                                    </div>
+                                </li>
+                                @:&ensp;&ensp;&ensp;
+                                countn += 1;
+                            }
+                            countn = 0;
+                        }
+                    </ul>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+    <tfoot><tr><td></td><td></td></tr></tfoot>
+</Table>

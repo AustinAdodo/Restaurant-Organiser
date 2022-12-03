@@ -1,0 +1,64 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>aspnet-Restaurant_Menu_Organiser-E68A055E-74C1-4300-A1C5-8E7FFBB8E78E</UserSecretsId>
+    <RootNamespace>Restaurant_Menu_Organiser</RootNamespace>
+    <CopyRefAssembliesToPublishDirectory>false</CopyRefAssembliesToPublishDirectory>
+    <ApplicationIcon />
+    <OutputType>WinExe</OutputType>
+    <StartupObject>Restaurant_Menu_Organiser.Program</StartupObject>
+  </PropertyGroup>
+
+  <!--<ItemGroup>
+    <Compile Remove="St\**" />
+    <Compile Remove="wwwroot\**" />
+    <Content Remove="St\**" />
+    <Content Remove="wwwroot\**" />
+    <EmbeddedResource Remove="St\**" />
+    <EmbeddedResource Remove="wwwroot\**" />
+    <None Remove="St\**" />
+    <None Remove="wwwroot\**" />
+    <TypeScriptCompile Remove="St\**" />
+    <TypeScriptCompile Remove="wwwroot\**" />
+  </ItemGroup>-->
+
+  <ItemGroup>
+    <Compile Remove="Data\Migrations\20220425154143_Disposabledata.cs" />
+    <Compile Remove="Data\Migrations\20220425154143_Disposabledata.Designer.cs" />
+    <Compile Remove="Data\Migrations\20220425154918_Disposabledata.cs" />
+    <Compile Remove="Data\Migrations\20220425154918_Disposabledata.Designer.cs" />
+    <Compile Remove="Data\Migrations\20220425160748_Disposabledata.cs" />
+    <Compile Remove="Data\Migrations\20220425160748_Disposabledata.Designer.cs" />
+    <Compile Remove="Data\Migrations\20220425161431_InitialCreate2.cs" />
+    <Compile Remove="Data\Migrations\20220425161431_InitialCreate2.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.20" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.20" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.20" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.21" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.21">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.20" />
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.6.4">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\Accounts\" />
+    <Folder Include="Views\Items\" />
+    <Folder Include="Views\Sales\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Shared\DynamDisplayindex.cshtml" />
+  </ItemGroup>
+
+</Project>

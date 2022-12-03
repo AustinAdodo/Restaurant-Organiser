@@ -1,0 +1,62 @@
+﻿@model Restaurant_Menu_Organiser.ViewModels.EditRoleViewModel
+@inject UserManager<IdentityUser> userManager
+@{
+    ViewData["Title"] = "EditingRole";
+}
+
+<h1>Current Roles</h1>
+@*<></></> *@
+<form method="post" class="mt-3">
+    <div class="form-group row">
+        <label asp-for="@Model.RoleId" class="col-sm-2 form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="@Model.RoleId" disabled class="form-control" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label asp-for="@Model.RoleName" class="col-sm-2 form-label"></label>
+        <div class="col-sm-10">
+            <input asp-for="@Model.RoleName" class="form-control" />
+            <span asp-validation-for="@Model.RoleName" class="text-danger"></span>
+        </div>
+    </div>
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="col-sm-5" style="float:right">
+        <button asp-action="EditRole" asp-controller="Administration" class="btn btn-primary">Update</button>
+        <button asp-action="Index" asp-controller="Administration" class="btn btn-primary">Cancel</button>
+    </div>
+</form>
+<br />
+<br />
+<div class="container">
+    <div class="card col-md-6 offset-3">
+        <div style="background-color:aliceblue" class="card-header">
+            Users In this Role
+        </div>
+        @if (Model.UsersInThisRole == null)
+        {
+            <div class="card-body">
+                <div class="card-title">There are no users assigned to this Role</div>
+            </div>
+            <div style="background-color:lightblue" class="card-footer">
+                <a class="btn btn-primary" asp-action="AddUser" asp-controller="Administration" asp-route-id="">
+                    Add Users to this Role
+                </a>
+            </div>
+        }
+        else
+        {
+            @foreach (var user in Model.UsersInThisRole)
+            {
+                <div class="card-body">
+                    <div class="card-title">@user</div>
+                    <br />
+                    <button class="btn btn-danger" asp-action="Delete" asp-controller="Administration" asp-rout-name="@user">Remove</button>
+                </div>
+                <div style="background-color:lightblue" class="card-footer">
+                    <a class="btn btn-danger" asp-action="EditUsersInARole" asp-controller="Administration" asp-route-id="">Manage</a>
+                </div>
+            }
+        }
+    </div>
+</div>

@@ -1,0 +1,22 @@
+﻿@model Restaurant_Menu_Organiser.ViewModels.CreateRoleViewModel
+@{
+    ViewData["Title"] = "CreateRole";
+}
+<h1 class="" style="">CreateRole</h1>
+<div class="container">
+    <div col-md-12>
+        <form method="post" asp-controller="Administration" asp-action="CreateRole">
+            <div asp-validation-summary="All" class="text-danger">
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2" asp-for="RoleName"></label>
+                <div class="col-md-10">
+                    <input asp-for="RoleName" class="form-control" placeholder="Email" />
+                    <span asp-validation-for="RoleName" class="text-danger"> </span>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary" name="Submit">Create Role</button>
+        </form>
+    </div>
+</div>
+

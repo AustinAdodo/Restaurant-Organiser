@@ -1,0 +1,200 @@
+﻿@model Restaurant_Menu_Organiser.ViewModels.EditEmployeeViewModel
+
+@{
+    ViewData["Title"] = "Apply edits to a specific employee";
+    var fullname = ViewBag.EmployeeFullName;
+    var id = ViewBag.EmployeeId;
+    var exid = ViewBag.EmployeeExtId;
+}
+<h5><strong>You`re about to edit &ensp;:&ensp;@fullname </strong></h5>
+<div class="container">
+    <div class="col-md-12">
+        <div class="form-group float-md-right">
+            <img style="height: 200px; width:200px" src="~/EmployeePhotos/baby.JPG" id="displayimageedit" asp-append-version="true" class="card-img-top" />
+        </div>
+        <form enctype="multipart/form-data" method="post" asp-action="Edit" asp-controller="Employees" asp-route-id="@id">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="@Model.EmployeeFirstName" class="control-label"></label>
+                <input asp-for="@Model.EmployeeFirstName" class="form-control" />
+                <span asp-validation-for="@Model.EmployeeFirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.EmployeeImage" class="control-label"></label>
+                <div class="col-sm-12">
+                    <input asp-for="@Model.EmployeeImage" class="form-control custom-file-input" />
+                    <label class="custom-file-label">Choose File...</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.EmployeeMiddleName" class="control-label"></label>
+                <textarea type="" asp-for="@Model.EmployeeMiddleName" class="form-control"></textarea>
+                <span asp-validation-for="@Model.EmployeeMiddleName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.EmployeeLastName" class="control-label"></label>
+                <input asp-for="@Model.EmployeeLastName" class="form-control" />
+                <span asp-validation-for="@Model.EmployeeLastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.EmployeeBasicSalary" class="control-label"></label>
+                <input asp-for="@Model.EmployeeBasicSalary" class="form-control" />
+                <span asp-validation-for="@Model.EmployeeBasicSalary" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.EmployeeBasicAllowance" class="control-label">Basic Allowance</label>
+                <input asp-for="@Model.EmployeeBasicAllowance class" form-control" />
+                <span asp-validation-for="@Model.EmployeeBasicAllowance" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.EmployeeStatus class=" control-label"></label>
+                @Html.DropDownListFor(a => a.EmployeeStatus, new List<SelectListItem>
+           {new SelectListItem{Text="Active", Value="Active", Selected=true},
+           new SelectListItem{Text="Inactive", Value="Inactive"},
+               }, "Select Current Employee Status")
+                <span asp-validation-for="@Model.EmployeeStatus " class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.EmployeeAccessLevel" class="control-label"></label>
+                @Html.DropDownListFor(a => a.EmployeeAccessLevel, new List<SelectListItem>
+            {new SelectListItem{Text="Admin", Value="Admin", Selected=true},
+            new SelectListItem{Text="SuperAdmin", Value="SuperAdmin" },
+            new SelectListItem{Text="Marketing", Value="Marketing"},
+            new SelectListItem{Text="Sales", Value="Sales"},
+            new SelectListItem{Text="ElevatedAccess", Value="ElevatedAccess"},
+            new SelectListItem{Text="IT", Value="IT"},
+            }, "Access Level")
+                <span asp-validation-for="@Model.EmployeeAccessLevel" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmployeeOtherAllowance" class="control-label"></label>
+                <input asp-for="EmployeeOtherAllowance" class="form-control" />
+                <span asp-validation-for="EmployeeOtherAllowance" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="EmployeeId" hidden="hidden" class=" form-control custom-file-input" />
+            </div>
+            <div class="form-group">
+                <input asp-for="EmployeeIdExtId" hidden="hidden" class=" form-control custom-file-input" />
+            </div>
+            <div class="form-group">
+                <label asp-for="EmployeeDOB" class="control-label"></label>
+                @Html.EditorFor(a => a.EmployeeDOB, new { htmlAttributes = new { @class = "calendar" } })
+                <span asp-validation-for="EmployeeDOB" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for=" EmployeeEmploymentDate" class="control-label"></label>
+                <input asp-for="EmployeeEmploymentDate" class="form-control" />
+                <span asp-validation-for="EmployeeEmploymentDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmployeeSex" class="control-label"></label>
+                @Html.DropDownListFor(a => a.EmployeeSex, new List<SelectListItem>
+        {new SelectListItem{Text="Male", Value="Male", Selected=true},
+        new SelectListItem{Text="Female", Value="Female" },
+        }, "Select Gender")
+                <span asp-validation-for="EmployeeSex" class="text-danger"></span>
+            </div>
+            @*<div class="form-group">
+            <label asp-for="NewEmployee.EmployeeDesignation" class="control-label"></label>
+            <span> @Html.CheckBoxFor(a => a.NewEmployee.EmployeeDesignation, new { @checked = "checked" })<span></span>
+            <span> @Html.CheckBoxFor(a => a.NewEmployee.EmployeeDesignation, new { @checked = "checked" })</span>
+            <span asp-validation-for="NewEmployee.EmployeeDesignation" class="text-danger"></span>
+        </div>*@
+            <div class="form-group">
+                <label asp-for="EmployeeDepartment" class="control-label"></label>
+                @Html.DropDownListFor(a => a.EmployeeDepartment, new List<SelectListItem>
+        {new SelectListItem{Text="SuperUser/CrossPlatform", Value="SuperUser/CrossPlatform", Selected=true},
+        new SelectListItem{Text="Procurement", Value="Procurement" },
+        new SelectListItem{Text="Marketing", Value="Marketing"},
+        new SelectListItem{Text="Sales Representative", Value="Sales Representative"},
+        new SelectListItem{Text="IT", Value="IT"},
+        }, "Select Department")
+                <span asp-validation-for="EmployeeDepartment" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmployeePhoneNumber" class="control-label"></label>
+                <input asp-for="EmployeePhoneNumber" class="form-control" />
+                <span asp-validation-for="EmployeePhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmployeeEmail" class="control-label"></label>
+                <input asp-for="EmployeeEmail" class="form-control" />
+                <span asp-validation-for="EmployeeEmail" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmployeeResidence" class="control-label"></label>
+                <textarea type="" asp-for="EmployeeResidence" class="form-control"></textarea>
+                <span asp-validation-for="EmployeeResidence" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmployeeNationality" class="control-label"></label>
+                @Html.DropDownListFor(a => a.EmployeeNationality, new List<SelectListItem>
+        {new SelectListItem{Text="Nigeria", Value="Nigeria", Selected=true},
+        new SelectListItem{Text="Ghana", Value="Ghana" },
+        new SelectListItem{Text="South Africa", Value="South Africa"},
+        new SelectListItem{Text="Uganda", Value="Uganda"},
+        new SelectListItem{Text="Senegal", Value="Senegal"},
+        new SelectListItem{Text="Ivory Coast", Value="Ivory Coast"},
+        new SelectListItem{Text="Niger", Value="Niger"},
+           }, "Select Country Of Origin")
+                <span asp-validation-for="EmployeeNationality" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmployeeStateOfOrigin" class="control-label"></label>
+                @Html.DropDownListFor(a => a.EmployeeStateOfOrigin, new List<SelectListItem>
+        {new SelectListItem{Text="Abia", Value="Abia", Selected=true},
+        new SelectListItem{Text="Lagos", Value="Lagos" },
+        new SelectListItem{Text="Edo", Value="Edo"},
+        new SelectListItem{Text="Anambra", Value="Anambra"},
+        new SelectListItem{Text="Enugu", Value="Enugu"},
+        new SelectListItem{Text="Adamawa", Value="Adamawa"},
+        new SelectListItem{Text="Katsina", Value="Katsina"},
+        new SelectListItem{Text="Kano", Value="Kano"},
+        new SelectListItem{Text="Kaduna", Value="Kaduna"},
+        new SelectListItem{Text="Delta", Value="Delta"},
+         }, "Select State Of Origin")
+                <span asp-validation-for="EmployeeStateOfOrigin" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmployeeLGAOfOrigin" class="control-label"></label>
+                @Html.DropDownListFor(a => a.EmployeeLGAOfOrigin, new List<SelectListItem>
+        {new SelectListItem{Text="Esan-West", Value="Esan-West", Selected=true},
+        new SelectListItem{Text="Esan-North-East", Value="Esan-North-East" },
+        new SelectListItem{Text="Oredo", Value="Oredo"},
+        }, "Select LGA Of Origin")
+                <span asp-validation-for="EmployeeLGAOfOrigin" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmployeeActivities" class="control-label"></label>
+                <textarea type="" asp-for="@Model.EmployeeActivities" class="form-control"></textarea>
+                <span asp-validation-for="EmployeeActivities" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EmployeeRemarks" class="control-label"></label>
+                <textarea type="" asp-for="@Model.EmployeeRemarks" class="form-control"></textarea>
+                <span asp-validation-for="EmployeeRemarks" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Update</button>
+            </div>
+            @section scripts
+            {
+                <script>
+                    $(document).ready(function () {
+                        $(".calendar").on("click", function () {  /*calender*/
+                            dateFormat: "dd-mm-yy"
+                        });
+                    });
+                    $(document).ready(function () {
+                    });
+                </script>
+                @*@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}*@
+            }
+        </form>
+    </div>
+</div>
+<div class="float-md-right">
+    <a asp-action="Index">Back to List</a>
+</div>
+

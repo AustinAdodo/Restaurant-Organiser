@@ -1,0 +1,24 @@
+﻿<div class="card">
+    <div style="background-color:darkcyan" class="card-header">
+        Role Id : {{person.Id}}
+    </div>
+    <div class="card-body">
+        <div class="card-title">Role Name : {{ThisRole}}</div><br />
+        <p><h3>Principal User In this Role : {{person.username1}}</h3></p><br />
+        <h3>Flags and Restrictions concerning this Role : No Flags or Restrictions Specified</h3><br />
+        <ul>
+            <li ng-repeat="person in ThisRole">
+                Username : {{person.username}}&ensp;&ensp;Email : {{person.email}}
+                <br />
+                <a class="btn btn-primary" asp-action="EditRole" asp-controller="Administration" asp-route-id="">
+                    Update Users
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div style="background-color:aquamarine" class="card-footer">
+        <span>Total Number of Users in this role :</span>  {{person.total}}.<br />
+        <span>Last Date Modified : </span>  @DateTime.Now<br />
+        <span>Last Date Modified : </span> @User.Identity.Name
+    </div>
+</div>

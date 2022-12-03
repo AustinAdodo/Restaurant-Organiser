@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewData["Title"] = "IndexEmployees";
+}
+
+<h1>Employee Management</h1>
+<table>
+    <thead>
+        <tr>
+            <th class="thmix" style="color: white; border-bottom:2px"><span class=" fas fa-clipboard-list"></span>&nbsp;Menu</th>
+            <th class="thmix" style="color: white; border-bottom:2px"><span class=" fas fa-clock"></span>Orders(Pending,Served,Cancelled)</th>
+            <th class="thmix" style="color: white; border-bottom:2px"><span class=" fas fa-cocktail"></span>Sold</th>
+            <th class="thmix" style="color: white; border-bottom:2px"><span class=" fas fa-biking"></span>Deliveries</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr id="submenudisplay">
+            Take an Order
+            <td>
+                <ul class="subs">
+                    <li class="grouping" data-loaded="closed" style="color:white"><span class=" fas fa-globe"></span>INTERCONTINENTAL</li>
+                    <li class="grouping" data-loaded="closed" style="color:white"><span class=" fas fa-globe-africa"></span>AFRICAN</li>
+                    <li class="grouping" data-loaded="closed" style="color:white"><span class=" fas fa-gulp"></span>LOCAL</li>
+                </ul>
+            </td>
+            <td>
+                <div class="container" id="maindisplay" style="width: 1000px; height: 1000px; "></div>
+            </td>
+        </tr>
+        <tr><td><span class=" fas fa-hotel"></span>Reservations</td></tr>
+        <tr><td><span class=" fas fa-gg"></span>Preferences</td></tr>
+        <tr><td><span class=" fas fa-wrench"></span>Settings</td></tr>
+    </tbody>
+    <tfoot><tr></tr></tfoot>
+</table>
+

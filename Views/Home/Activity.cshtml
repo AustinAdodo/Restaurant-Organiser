@@ -1,0 +1,579 @@
+﻿@model Restaurant_Menu_Organiser.Models.ViewModel.IndexViewModel
+@using Restaurant_Menu_Organiser.Models.Items
+@using Restaurant_Menu_Organiser.Models.Notifications
+@{
+    //string sx = ViewBag.sx;
+    string sx = "Male";
+    ViewData["Title"] = "Activity for " + User.Identity.Name;
+    Dictionary<int, Item> DefaultItems = ViewBag.DefaultItems;
+    Dictionary<string, OrderStatus> DefaultOrders = ViewBag.Orders;
+    Dictionary<int, Sale> DefaultSales = ViewBag.Sales;
+    Decimal GrandTotal = ViewBag.Grandtotal;
+    int chinaid = ViewBag.ChineseId; int Koreaid = ViewBag.Koreaid; int Ghanaid = ViewBag.Ghanaid; int NigeriaId = ViewBag.NigeriaId;
+    int Italyid = ViewBag.Italyid; int Indiaid = ViewBag.Indiaid; /*int southafriId = ViewBag.southafriId;*/
+    int NotiCount = ViewBag.NotificationCount;
+    int TotalNotiCount = ViewBag.TotalNotificationCount;
+    Dictionary<int, Notification> NotificationBody = ViewBag.NotificationBody;
+    int i = 0;
+}
+<style> .toolbar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        background-color: #1976d2;
+        color: white;
+        font-weight: 600;
+    }
+</style>
+<h1 class="justify-content-center" style="color: #7386D5">Activities<span id="messageUpdates" style="width:auto"></span></h1>
+<div class="modal left" id="notificationmodal" tabindex="-1" role="dialog" aria-labelledby="notificationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" status="" style="color:navy" id="notificationModalLabel">Notifications</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                @foreach (KeyValuePair<int, Notification> kvp in NotificationBody)
+                {
+                    string zebra;
+                    zebra = (i % 2 == 0) ? "lightblue" : "white";
+                    <div style="background-color: @zebra">
+                        @switch (@kvp.Value.Status)
+                        {
+                            case "Opened":
+                                <p><strong style="color:blueviolet">@kvp.Value.NameHeader</strong><span style="font-size:12px; color:navy" class="float-sm-right">@kvp.Value.DateandTime.Replace("Date :", "")</span></p>
+                                <hr />
+                                <div style="color:blueviolet"><strong>@kvp.Value.Body</strong></div>
+                                break;
+                            case "Closed":
+                                <p>@kvp.Value.NameHeader<span style="font-size:12px; color:navy" class="float-sm-right">@kvp.Value.DateandTime.Replace("Date :", "")</span></p>
+                                <hr />
+                                <div style="color:black">@kvp.Value.Body</div>
+                                break;
+                        }
+                        <hr /><hr />
+                        @switch (@kvp.Value.NameHeader)
+                        {
+                            case "Delete Employee Request":
+                                if (@kvp.Value.Status == "Opened")
+                                {
+                                    <button type="button" dec="Approved" notiId="@kvp.Value.Id" class="btn btn-primary">Approve</button>
+                                    <button id="decline" type="button" dec="Declined" notiId="@kvp.Value.Id" class="btn btn-danger" data-dismiss="modal">Decline</button>
+                                }
+                                break;
+                            case "Success":
+                                if (@kvp.Value.Status == "Opened")
+                                {
+                                    <button type="button" dec="Ok" notiId="" class="btn btn-primary" data-dismiss="modal">Ok</button>
+                                }
+                                break;
+                            case "Failure":
+                                if (@kvp.Value.Status == "Opened")
+                                {
+                                    <button type="button" dec="Ok" notiId="" class="btn btn-primary" data-dismiss="modal">Ok</button>
+                                }
+                                break;
+                            case "Edit Employee Request":
+                                if (@kvp.Value.Status == "Opened")
+                                {
+                                    <button type="button" dec="Approved" notiId="@kvp.Value.Id" class="btn btn-primary">Approve</button>
+                                    @:&ensp; <button id="viewdetails" type="button" dec="view" notiId="@kvp.Value.Id" class="btn btn-primary">View Details</button>
+                                    @:&ensp;<button type="button" dec="Declined" notiId="@kvp.Value.Id" class="btn btn-danger" data-dismiss="modal">Decline</button>
+                                }
+                                break;
+                        }
+                        <br style="margin:1px" />
+                    </div>
+                    <hr style="background-color:lightblue" />
+                    i += 1;
+                }
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="presentationmodal" tabindex="-1" role="dialog" aria-labelledby="presentationmodal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header toolbar">
+                <img width="40"
+                     alt="Restaurant Organiser Logo"
+                     src="~/Images/HappyCheff2.jpg"/>
+                <h5 class="modal-title" status="" style="" id="notificationModalLabel">Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" style="background-color: red; width: 20px; height:20px;font-size:18px;">&times;</span>
+                </button>
+            </div>
+                <div id="notificationModalLabelbody" class="modal-body" style="background-color: antiquewhite">
+                    <partial name="ClientIndex" />
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row" style="width: 1250px; margin-right:0px">
+            <div class="col-md-3" style="">
+                @{
+                    if (User.IsInRole("Admin"))
+                    {
+                        <div class="wrapper">
+                            <!-- Sidebar<div></div>-->
+                <nav id="sidebar1">
+                    <div class="sidebar-header">
+                        <img src="/Images/HappyCheff2.jpg" style="height: 40px; width: 40px; display:none;" />
+                        @if (NotiCount > 0)
+                        {
+                            <span class="float-md-right">
+                                <span id="notiicon" style="color:green" class="fa fa-podcast"></span>&ensp;
+                                <button id="notibutton" class="btn btn-primary" data-toggle="modal" data-target="#notificationmodal">Notifications&nbsp;<span id="notinumber" class="badge badge-light">@NotiCount</span></button>
+                            </span><br /><br />
+                        }
+                        @if (NotiCount == 0)
+                        {
+                            <span class="float-md-right">
+                                <span id="notiicon" style="color:royalblue" class="fa fa-podcast"></span>&ensp;
+                                <button id="notibutton" class="btn btn-primary" data-toggle="modal" data-target="#notificationmodal">Notifications&nbsp;<span id="notinumber" class="badge badge-light">@NotiCount</span></button>
+                            </span><br /><br />
+                        }
+                    </div>
+                    <ul class="list-unstyled components">
+                        <li class="active">
+                            <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Common Actions</a>
+                            <ul class="collapse list-unstyled" id="homeSubmenu">
+                                <li>
+                                    <a class="" asp-area="" asp-controller="Employees" asp-action="Index">&nbsp;Employee Detail&nbsp;</a>
+                                </li>
+                                <li>
+                                    <a href="#">Reservations</a>
+                                </li>
+                                <li>
+                                    <a href="#">Sales</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">Branches</a>
+                        </li>
+                        <li>
+                            <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Business Analytics</a>
+                            <ul class="collapse list-unstyled" id="pageSubmenu">
+                                <li>
+                                    <a href="#">Page 1</a>
+                                </li>
+                                <li>
+                                    <a href="#">Page 2</a>
+                                </li>
+                                <li>
+                                    <a href="#">Page 3</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">Portfolio</a>
+                        </li>
+                        <li>
+                            <a href="#">Charts</a>
+                        </li>
+                        <li>
+                            <a href="#">Sales</a>
+                        </li>
+                        <li>
+                            <a href="#">Logistics</a>
+                        </li>
+                        <li>
+                            <a href="#">Profiles</a>
+                        </li>
+                        <li>
+                            <a href="#">Reservations</a>
+                        </li>
+                    </ul>
+                    <ul class="list-unstyled CTAs">
+                        <li>
+                            <a href="https://mudiabusiness.com/resourses/atxp/12012v3.zip" class="download">Updates</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+                }
+                if (!User.IsInRole("Admin"))
+                {
+                    <nav id="sidebar" style="border-width:2px; border-color: #7386D5">
+                        <div class="sidebar-header">
+                            <img class="offset-2" src="/Images/HappyCheff2.jpg" style="height: 40px; width: 40px; display:none;" /><br />
+                            @if (NotiCount > 0)
+                            {
+                                <span class="float-sm-start offset-1">
+                                    <span id="notiicon" style="color:green" class="fa fa-podcast"></span>&ensp;
+                                    <button id="notibutton" class="btn btn-primary" data-toggle="modal" data-target="#notificationmodal">Notifications&nbsp;<span id="notinumber" class="badge badge-light">@NotiCount</span></button>
+                                </span><br /><br />
+                            }
+                            @if (NotiCount == 0)
+                            {
+                                <span class="float-sm-start offset-1">
+                                    <span id="notiicon" style="color:royalblue" class="fa fa-podcast"></span>&ensp;
+                                    <button id="notibutton" class="btn btn-primary" data-toggle="modal" data-target="#notificationmodal">Notifications&nbsp;<span id="notinumber" class="badge badge-light">@NotiCount</span></button>
+                                </span>
+                                <br /><br />
+                            }
+                        </div>
+                        <ol class="list-unstyled offset-2 notAdmin" style="">
+                            <li class="active" style="padding-bottom:8px">
+                                <a class="" href="#homeSubmenu" aria-expanded="false">
+                                    <span class="fas fa-asterisk" style="color: #7386D5"></span>&nbsp;Common Tasks&nbsp;<span style="color:white" class="fa fa-angle-right"></span>
+                                </a>
+                                <ul id="homeSubmenu" hidden="hidden">
+                                    <li><a href="#"><i class="fas fa-arrow-right"></i>&nbsp;CookBook</a></li>
+                                    <li><a href="#"><i class="fas fa-arrow-right"></i>&nbsp;More Options</a></li>
+                                </ul>
+                            </li>
+                            <li style="padding-bottom:8px">
+                                <a href="#"><span style="color: #7386D5" class="fas fa-user"></span>&nbsp;Profile&nbsp;</a>
+                            </li>
+                            <li style="padding-bottom:8px">
+                                <a href="#"><span style="color: #7386D5" class="fas fa-clipboard-check"></span>&nbsp;Sales&nbsp;</a>
+                            </li>
+                            <li style="padding-bottom:8px">
+                                <a href="#">
+                                    <span style="color: #7386D5" class="fas fa-luggage-cart"></span>&nbsp;Branches&nbsp;
+                                </a>
+                            </li>
+                            <li style="padding-bottom:8px">
+                                @{
+                                    if (sx == "Female")
+                                    {
+                                        <span style="color: #7386D5" class="fas fa-female "></span><a class="" asp-area="" asp-controller="Employees" asp-action="Index">&nbsp;Employee Detail&nbsp;</a>
+                                    }
+                                    else
+                                    {
+                                        <span style="color: #7386D5" class="fas fa-male "></span><a class="" asp-area="" asp-controller="Employees" asp-action="Index">&nbsp;Employee Detail&nbsp;</a>
+                                    }
+                                }
+                            </li>
+                            <li style="padding-bottom:8px">
+                                <a href="#"><span style="color: #7386D5" class="fa fa-paper-plane"></span>&nbsp;Reservations&nbsp;</a>
+                            </li>
+                        </ol>
+                    </nav>
+                }
+            }
+            <br /><br />
+            <div id="chefsmile"></div>
+        </div>
+        <div class="col-md-9" id="mainmenu">
+            <nav class="navbar navbar-expand-lg navbar-light">
+                <div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <button class="btn btn-info" id="sidebarCollapse" type="button">
+                                <i class="fas fa-align-left"></i>
+                                <span class="">Toggle Sidebar</span>
+                            </button>
+                        </div>
+                        <div class="card-img-overlay"></div>
+                        <div class="col-md-10">
+                            <ul class="nav nav-tabs" style="width:378px" role="tablist">
+                                <li class="na-item" role="presentation"><button type="button" role="tab" aria-selected="true" class="nav-link active" data-toggle="tab" href="#Menu">Menu</button></li>&emsp;
+                                <li class="na-item" role="presentation"><button type="button" role="tab" aria-selected="false" class="nav-link" data-toggle="tab" href="#orders">Orders</button></li>&emsp;
+                                <li class="na-item" role="presentation"><button type="button" role="tab" aria-selected="false" class="nav-link" data-toggle="tab" href="#sales">Sales</button></li>&emsp;
+                                <li class="na-item" role="presentation"><button type="button" role="tab" aria-selected="false" class="nav-link" data-toggle="tab" href="#deli">Deliveries</button></li>
+                            </ul>
+                        </div>
+                    </div><br />
+                    <div class="row" style="width: 1000px">
+                        <div class="col-md-8">
+                            <div class="tab-content">
+                                <div id="Menu" class="tab-pane active" role="tabpanel" aria-labelledby="">
+                                    <table id="foodtable" style="height:600px; width:800px">
+                                        <thead>
+                                            <tr>
+                                                <th class="thmix" style="color: white;"><span class=" fas fa-clipboard-list"></span>&ensp;Menu Category</th>
+                                                <th id="displayfor" class="thmix" style="color: white;">&ensp;Displaying For Korean Cuisines</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr id="submenudisplay">
+                                                <td style="width: 224px;">
+                                                    <ul class="country">
+                                                        <li class="grouping dropdown" data-loaded="false" style="color:blue">
+                                                            <span class=" fas fa-globe" style="color:white"></span>&nbsp;
+                                                            <button class="active" type="button" id="int" aria-expanded="false" data-toggle="" role="presentation" style="color:blue">CONTINENTAL</button>
+                                                            <ul class="select-menu" style="background-color:dodgerblue; padding: 10px; display:none">
+                                                                <li class="dropdown-item">
+                                                                    <a style="color:white" gid="@chinaid" data-loaded="closed" country="china" class="dropdown-item">Chinese</a>
+                                                                </li>
+                                                                <li class="dropdown-item">
+                                                                    <a style="color:white" gid="@Indiaid" data-loaded="closed" country="India" class="dropdown-item">Indian</a>
+                                                                </li>
+                                                                <li class="dropdown-item">
+                                                                    <a style="color:white" gid="@Italyid" data-loaded="closed" country="Italy" class="dropdown-item">Italian</a>
+                                                                </li>
+                                                                <li class="dropdown-item">
+                                                                    <a style="color:white" gid="@Koreaid" data-loaded="closed" country="South-Korea" class="dropdown-item">Korean</a>
+                                                                </li>
+                                                            </ul>
+                                                        </li>
+                                                        <li class="grouping dropdown" data-loaded="false">
+                                                            <span class=" fas fa-globe-africa" style="color:white"></span>&nbsp;
+                                                            <button class="" type="button" style="color: blue" id="afri" aria-expanded="false" role="presentation">AFRICAN</button>
+                                                            <ul class="select-menu" style="background-color: dodgerblue; padding: 10px; width:150px; display: none">
+                                                                <li class="dropdown-item">
+                                                                    <a class="align-content-center dropdown-item" style="color:white;" href="#">Ghanian</a>
+                                                                </li>
+                                                                <li class="dropdown-item">
+                                                                    <a class="align-content-center dropdown-item" style="color:white" href="#">Senegalese</a>
+                                                                </li>
+                                                                <li class="dropdown-item">
+                                                                    <a class="align-content-center dropdown-item" style="color:white" href="#">South African</a>
+                                                                </li>
+                                                            </ul>
+                                                        </li>
+                                                        <li class="grouping dropdown" data-loaded="false">
+                                                            <span class="fas fa-puzzle-piece" style="color:white"></span>&nbsp;
+                                                            <button type="button" class="" id="loc" aria-expanded="false" role="presentation">LOCAL</button>
+                                                            <ul class="select-menu" style="background-color:dodgerblue; padding: 10px; display: none">
+                                                                <li class="dropdown-item">
+                                                                    <a style="color:white" href="#" class="dropdown-item">Formal</a>
+                                                                </li>
+                                                                <li class="dropdown-item">
+                                                                    <a style="color:white" href="#" class="dropdown-item">Native</a>
+                                                                </li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                </td>
+                                                <td>
+                                                    <div class="container" id="maindisplay" style="">
+                                                        @*<span></span>*@
+                                                        <ul style="">
+                                                            @if (DefaultItems != null)
+                                                            {
+                                                                int countn = 0;
+                                                                string attbute = "dragnn";
+                                                                foreach (KeyValuePair<int, Item> food in DefaultItems)
+                                                                {
+                                                                    var stream = food.Value.pictureUrl;
+                                                                    <li id="@attbute@countn" class="dragline" style="display: inline-block">
+                                                                        <div class="drag1">
+                                                                            <img style="height: 120px; width: 220px; border:2px solid purple;" src="@stream" />
+                                                                            <div><span style="color:white">@food.Value.Name</span></div>
+                                                                        </div>
+                                                                    </li>
+                                                                    @:&ensp;
+                                                                    countn += 1;
+                                                                }
+                                                                countn = 0;
+                                                            }
+                                                        </ul>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot><tr><td></td><td><button class="btn btn-info float-md-right" disabled="disabled">Next Page</button></td></tr></tfoot>
+                                    </table>
+                                </div>
+                                <div id="orders" class="tab-pane fade" role="tabpanel" aria-labelledby="">
+                                    <table id="orderstable" style="width:800px">
+                                        <thead>
+                                            <tr>
+                                                <th class="" style="color: purple; border-bottom:2px"><span style="color: white" class=" fas fa-clipboard-list"></span>&nbsp;Orders</th>
+                                                <th class="right" style="color: purple; border-bottom:2px"><span style="color: white" class=" fas fa-book"></span>&nbsp;Current Order Details</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (KeyValuePair<string, OrderStatus> d in DefaultOrders)
+                                            {
+                                                <tr id="submenudisplay">
+                                                    <td>
+                                                        <p class="grouping" data-loaded="closed" style="color:purple"><span class=" fas fa-globe">Restaurant Name:&nbsp;</span><span>Happy Restaurant</span></p><br /><br />
+                                                        <p class="grouping" data-loaded="closed" style="color: purple"><span class=" fas fa-globe">Date/Time:&nbsp;</span><span>@d.Value.Orderdate</span></p>
+                                                    </td>
+                                                    <td class="right">
+                                                        <div class="container" id="maindisplay" style="">
+                                                            <span class="foo" style="color:dodgerblue">
+                                                                Name&nbsp;:&nbsp; @d.Value.ItemName&nbsp;|&nbsp;
+                                                            </span><br />
+                                                            @if (d.Value.Quantity == "1Plates")
+                                                            {
+                                                                <span class="qty" style="color:white">Quantity&nbsp;:&nbsp;1 Plate</span>
+                                                            }
+                                                            @if (d.Value.Quantity != "1Plates")
+                                                            {
+                                                                <span style="color:white">Quantity&nbsp;:&nbsp;</span><span class="qty" style="color:white">@d.Value.Quantity</span>
+                                                            }
+                                                            <span class="tbl" style="color:white">&ensp;&nbsp;Table Name&nbsp;:&nbsp;Table-@d.Value.Table&ensp;|&nbsp;</span>
+                                                            @if (d.Value.MenuStatus == "Served")
+                                                            {
+                                                                <span style="color:navy">Status&nbsp;:</span><span class="fas fa-arrow-right" style="color:green">&nbsp;@d.Value.MenuStatus&nbsp;|&nbsp;</span>
+                                                            }
+                                                            @if (d.Value.MenuStatus == "Pending")
+                                                            {
+                                                                <span style="color:navy">Status&nbsp;:</span><span class="fas fa-clock" style="color: yellow">&nbsp;@d.Value.MenuStatus&ensp;|&nbsp;</span>
+                                                                <br /><span><button class="btn btn-info serving">Mark Served</button></span>@:&ensp;<span><button class="btn btn-danger">Cancel</button></span>
+                                                            }
+                                                            @if (d.Value.MenuStatus == "Cancelled")
+                                                            {
+                                                                <span style="color:navy">Status&nbsp;:</span><span class="fa fa-minus-circle" style="color:red">&nbsp;@d.Value.MenuStatus&nbsp;|&nbsp;</span>
+                                                            }
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                        <tfoot><tr><td></td><td></td></tr></tfoot>
+                                    </table>
+                                </div>
+                                <div id="sales" class="tab-pane fade" role="tabpanel" aria-labelledby="">
+                                    <div class="col-md-6 offset-6">
+                                        <label style="color: white; float: right">Select Date:</label>
+                                        <span class="fas fa-calendar" style="color: white; float:right"></span>&ensp;<input id="salecal" aria-expanded="true">
+                                    </div><br />
+                                    <table style="width:1000px">
+                                        <thead>
+                                            <tr>
+                                                <th class="thmix" style="color: gold; border-bottom: 2px; width:auto"><span class=" fas fa-clipboard-list"></span>&nbsp;Sales Date</th>
+                                                <th class="thmix" style="color: gold; border-bottom: 2px; width:auto"><span class=" fas fa-book"></span>&nbsp;Payment Type</th>
+                                                <th class="thmix" style="color: gold; border-bottom: 2px; width:auto"><span class=" fas fa-mug-hot"></span>&nbsp;Order Taken By</th>
+                                                <th class="thmix" style="color: gold; border-bottom: 2px; width:auto"><span class=" fas fa-pen"></span>&nbsp;Item Name</th>
+                                                <th class="thmix" style="color: gold; border-bottom: 2px; width:auto"><span class=" fas fa-money-bill"></span>&nbsp;Item Price</th>
+                                                <th class="thmix" style="color: gold; border-bottom: 2px; width:auto"><span class=" fas fa-shopping-bag"></span>&nbsp;Quantity</th>
+                                                <th class="thmix" style="color: gold; border-bottom: 2px; width:auto"><span class=" fas fa-pencil"></span>&nbsp;Sum Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (DefaultSales != null)
+                                            {
+                                                foreach (KeyValuePair<int, Sale> sale in DefaultSales)
+                                                {
+                                                    string[] dateTimeARRAY = sale.Value.SaleDate.ToString().Split(" ");
+
+                                                    <tr id="submenudisplay">
+                                                        <td style="color:deepskyblue">
+                                                            @dateTimeARRAY[0]&nbsp;&nbsp;:&nbsp;&nbsp;Time:@sale.Value.SaleTime
+                                                        </td>
+                                                        <td style="color:white">
+                                                            @sale.Value.PaymentType
+                                                        </td>
+                                                        <td style="color:white">
+                                                            <span>@sale.Value.RestaurantName</span>&nbsp;&nbsp;<span>:@sale.Value.StaffName</span>
+                                                        </td>
+                                                        <td style="color:white">
+                                                            @sale.Value.ItemName
+                                                        </td>
+                                                        <td style="color:blue">
+                                                            @sale.Value.Price
+                                                        </td>
+                                                        <td style="color:white">
+                                                            @sale.Value.Quantity
+                                                        </td>
+                                                        <td style="color:green">
+                                                            @sale.Value.SumTotal
+                                                        </td>
+                                                    </tr>
+
+                                                }
+                                            }
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td><button class="btn btn-info" disabled="disabled">Previous</button></td>
+                                                <td></td>
+                                                <td><button class="btn btn-info">Next</button></td>
+                                                <td style="color:goldenrod">GRAND TOTAL&nbsp;:</td>
+                                                <td style="color:green">@GrandTotal</td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                                <div id="deli" class="tab-pane fade" role="tabpanel" aria-labelledby="">
+                                    <table styel="border-color:purple">
+                                        <thead>
+                                            <tr>
+                                                <th class="thmix" style="color: gold; border-bottom:2px"><span class=" fas fa-clipboard-list"></span>&nbsp;Destination</th>
+                                                <th class="thmix" style="color: fuchsia; border-bottom:2px"><span class=" fas fa-clock"></span>&nbsp;Source Detail</th>
+                                                <th class="thmix" style="color: green; border-bottom:2px"><span class=" fas fa-clock"></span>&nbsp;Delivery Detail</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr id="submenudisplay">
+                                                <td><span style="color: silver;" id="">23,Idowu Taylor, Victoria Island</span></td>
+                                                <td>
+                                                    <span style="color: silver;" id="">Happy Restaurant 1 at 12:14 </span>
+                                                </td>
+                                                <td><span style="color: silver;" id="">Promo : Ref:10002341</span></td>
+                                            </tr>
+                                            <tr id="submenudisplay">
+                                                <td><span style="color: silver;" id="">181,Alfred Rewane, Victoria Island</span></td>
+                                                <td>
+                                                    <span style="color: silver;" id="">Happy Restaurant 1 at 13:40</span>
+                                                </td>
+                                                <td><span style="color: silver;" id="">Promo : Ref:10002344</span></td>
+                                            </tr>
+                                            <tr id="submenudisplay">
+                                                <td><span style="color: silver;" id="">6,Kashamu Street, Lekki Ph.1</span></td>
+                                                <td>
+                                                    <span style="color: silver;" id="">Happy Restaurant 1 at 17:30 </span>
+                                                </td>
+                                                <td><span style="color: silver;" id="">Promo : 10002359 </span></td>
+                                            </tr>
+                                            <tr id="submenudisplay">
+                                                <td><span style="color: silver;" id="">8,Henry Oke Street, Lekki Ph.1</span></td>
+                                                <td>
+                                                    <span style="color: silver;" id="">Happy Restaurant 1 at 17:39 </span>
+                                                </td>
+                                                <td><span style="color: silver;" id="">Promo : 10002361 </span></td>
+                                            </tr>
+                                            <tr id="submenudisplay">
+                                                <td><span style="color: silver;" id="">6,Kashamu Street, Lekki Ph.1</span></td>
+                                                <td>
+                                                    <span style="color: silver;" id="">Happy Restaurant 1 at 17:30 </span>
+                                                </td>
+                                                <td><span style="color: silver;" id="">Promo : 10002359 </span></td>
+                                            </tr>
+                                            <tr id="submenudisplay">
+                                                <td><span style="color: silver;" id="">2,Abuja Road, Bannana Island,Ikoyi</span></td>
+                                                <td>
+                                                    <span style="color: silver;" id="">Happy Restaurant 1 at 18:15 </span>
+                                                </td>
+                                                <td><span style="color: silver;" id="">Promo : 10002363 </span></td>
+                                            </tr>
+                                            <tr id="submenudisplay">
+                                                <td><span style="color: silver;" id="">12,Glover Road, Ikoyi</span></td>
+                                                <td>
+                                                    <span style="color: silver;" id="">Happy Restaurant 1 at 19:30 </span>
+                                                </td>
+                                                <td><span style="color: silver;" id="">Promo : 10002364 </span></td>
+                                            </tr>
+                                            <tr id="submenudisplay">
+                                                <td><span style="color: silver;" id="">6,Joel Ogunaike,GRA, Ikeja</span></td>
+                                                <td>
+                                                    <span style="color: silver;" id="">appy Restaurant 1 at 19:43 </span>
+                                                </td>
+                                                <td><span style="color: silver;" id="">Promo : 100023566 </span></td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot><tr><td></td><td></td><td></td></tr></tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 offset-2" id="notification-panel" style="width: 200px;">
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">                                         
+    /* const { data } = require("jquery");*/
+</script>
+

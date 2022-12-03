@@ -1,0 +1,56 @@
+﻿@model List<UserRoleViewModel>
+
+@{
+    ViewData["Title"] = "EditUsersInARole";
+    var RoleId = ViewBag.RoleId;
+    string description = "";
+    string roleName = ViewBag.RoleName;
+}
+
+<h1>Apply Updates To this Role</h1>
+
+<div class="container">
+    <form method="post" asp-action="EditUsersInARole" asp-controller="Administration">
+        @{
+            <div class="card col-md-10">
+                <div style="background-color:darkcyan" class="card-header">
+                    Role Id : @RoleId
+                </div>
+                <div class="card-body">
+                    <div class="card-title">Role Name : @roleName</div>
+                    <br />
+                    <h1>Users In This Role</h1>
+                    @if ( Model != null && Model.Count > 0)
+                    {
+                        @for (int i = 0; i < Model.Count; i++)
+                        {
+                            <ul>
+                                <li>
+                                    <div class="form-check m-1">
+                                        <span style="background-color: cadetblue; color: floralwhite"></span><input asp-for="@Model[i].IsSelected" class="form-check-input" /><span style="background-color: cadetblue; color: floralwhite">UserName : @Model[i].UserName</span>
+                                        <span style="background-color: cadetblue; color: floralwhite">FullName : @Model[i].Fullname</span>
+                                        <span><input type="hidden" asp-for="@Model[i].Fullname" /></span>
+                                        <span><input type="hidden" asp-for="@Model[i].UserName" /></span>
+                                        <span><input type="hidden" asp-for="@Model[i].UserId" /></span>
+                                    </div>
+                                </li>
+                            </ul>
+                        }
+                    }
+                <div class="col-sm-6 offset-2">
+                    <button type="submit" class="btn btn-info" asp-action="EditUsersInARole" asp-controller="Administration" asp-route-RoleId="@RoleId">Apply Updates</button>
+                    &ensp;&ensp;
+                    <button type="submit" class="btn btn-info" asp-action="Index" asp-controller="Administration">Back</button>
+                </div>
+                </div>
+                <div style="background-color:aquamarine" class="card-footer">
+                    @{string add = "Additional Information on this Role"; }
+                    @{ description = (roleName == "Admin") ? "Super User/Admin" : (roleName == "IT") ? "IT Personel : CRUD Operations, Back-end, Server Management." :
+                                    (roleName == "ElevatedAccess") ? "Elevated Access to Restricted actions, Approvals on such actions are required." : "Normal Users"; }
+                    <span style="background-color: cadetblue; color: floralwhite">@add</span> : @description
+                </div>
+            </div>
+        }
+    </form><br />
+    @*<li></li><input/>*@
+</div>
