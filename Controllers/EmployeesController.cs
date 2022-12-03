@@ -215,7 +215,7 @@ namespace Restaurant_Menu_Organiser.Controllers
         // POST: Employees/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [ApprovalRequiredForAction(RequestingRoles = "ElevatedAccess", Action = "Delete Employee")] ///Post Params Only
+        [ApprovalRequiredForAction(RequestingRoles = "ElevatedAccess", Action = "Delete Employee")]
         public IActionResult DeleteConfirmed(int id, string UserId)
         {
             _employeeRepository.DeleteEmployee(id);

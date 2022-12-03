@@ -18,7 +18,7 @@ using Restaurant_Menu_Organiser.Models.Employees;
 
 namespace Restaurant_Menu_Organiser.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

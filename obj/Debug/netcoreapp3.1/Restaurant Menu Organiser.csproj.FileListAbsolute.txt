@@ -892,3 +892,15 @@ C:\Stash\Work\Projects\Restaurant Menu Organiser\obj\Debug\netcoreapp3.1\Restaur
 C:\Stash\Work\Projects\Restaurant Menu Organiser\obj\Debug\netcoreapp3.1\Restaurant Menu Organiser.dll
 C:\Stash\Work\Projects\Restaurant Menu Organiser\obj\Debug\netcoreapp3.1\Restaurant Menu Organiser.pdb
 C:\Stash\Work\Projects\Restaurant Menu Organiser\obj\Debug\netcoreapp3.1\Restaurant Menu Organiser.genruntimeconfig.cache
+C:\Stash\Work\Projects\Restaurant Menu Organiser\bin\Debug\netcoreapp3.1\NUnit3.TestAdapter.dll
+C:\Stash\Work\Projects\Restaurant Menu Organiser\bin\Debug\netcoreapp3.1\NUnit3.TestAdapter.pdb
+C:\Stash\Work\Projects\Restaurant Menu Organiser\bin\Debug\netcoreapp3.1\nunit.engine.dll
+C:\Stash\Work\Projects\Restaurant Menu Organiser\bin\Debug\netcoreapp3.1\nunit.engine.api.dll
+C:\Stash\Work\Projects\Restaurant Menu Organiser\bin\Debug\netcoreapp3.1\nunit.engine.core.dll
+C:\Stash\Work\Projects\Restaurant Menu Organiser\bin\Debug\netcoreapp3.1\testcentric.engine.metadata.dll
+C:\Stash\Work\Projects\Restaurant Menu Organiser\bin\Debug\netcoreapp3.1\Castle.Core.dll
+C:\Stash\Work\Projects\Restaurant Menu Organiser\bin\Debug\netcoreapp3.1\Moq.dll
+C:\Stash\Work\Projects\Restaurant Menu Organiser\bin\Debug\netcoreapp3.1\Moq.AutoMock.dll
+C:\Stash\Work\Projects\Restaurant Menu Organiser\bin\Debug\netcoreapp3.1\NonBlocking.dll
+C:\Stash\Work\Projects\Restaurant Menu Organiser\bin\Debug\netcoreapp3.1\Serilog.dll
+C:\Stash\Work\Projects\Restaurant Menu Organiser\bin\Debug\netcoreapp3.1\Serilog.Sinks.File.dll
