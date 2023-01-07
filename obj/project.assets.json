@@ -52,7 +52,7 @@
     "frameworks": {
       "netcoreapp31": {
         "targetAlias": "netcoreapp3.1,net6.0,net7.0",
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.401\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
       }
     }
   }
