@@ -103,10 +103,11 @@ namespace Restaurant_Menu_Organiser.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        //[Route("custom/custom") ]
         public async Task<IActionResult> Create(Employee emp)
         {
             await _employeeRepository.CreateEmployee(emp);
-            return View();
+            return RedirectToAction();
         }
 
         // GET: Employees/Edit

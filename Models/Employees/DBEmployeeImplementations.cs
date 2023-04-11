@@ -104,7 +104,7 @@ namespace Restaurant_Menu_Organiser.Models.Employees
         public async Task<string> DeActivateEmployee(Employee employee)
         {
             //string employeeStatus = "";
-            employee.EmployeeStatus = (employee.EmployeeStatus == "Active") ? "Inactive" : "Active";
+            employee.EmployeeStatus = (employee.EmployeeStatus == "Active") ? "Inactive" : employee.EmployeeStatus;
             await this.UpdateEmployee(employee);
             return employee.EmployeeStatus;
         }

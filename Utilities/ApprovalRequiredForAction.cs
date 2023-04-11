@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using Restaurant_Menu_Organiser.Data;
-using Restaurant_Menu_Organiser.Models.Approvals;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Restaurant_Menu_Organiser.Utilities.Services;
-using Restaurant_Menu_Organiser.Repositories;
 using Restaurant_Menu_Organiser.Models.Notifications;
 using Microsoft.AspNetCore.Routing;
-using Restaurant_Menu_Organiser.ViewModels;
 
 namespace Restaurant_Menu_Organiser.Utilities
 {
